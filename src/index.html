@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Verificador de URLs</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            padding: 20px;
+        }
+        input {
+            width: 80%;
+            padding: 10px;
+            margin-bottom: 10px;
+        }
+        button {
+            padding: 10px 20px;
+            cursor: pointer;
+        }
+        #resultado {
+            margin-top: 20px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+    <h2>Verificador de URLs</h2>
+    <input type="text" id="urlInput" placeholder="Cole a URL aqui">
+    <button onclick="verificarURL()">Verificar</button>
+    <p id="resultado"></p>
+
+    <script>
+        function verificarURL() {
+            let url = document.getElementById("urlInput").value;
+            let resultado = document.getElementById("resultado");
+
+            if (!url) {
+                resultado.textContent = "Por favor, insira uma URL.";
+                resultado.style.color = "red";
+                return;
+            }
+
+            resultado.textContent = "Verificando URL...";
+            resultado.style.color = "black";
+
+        }
+    </script>
+
+</body>
+</html>
