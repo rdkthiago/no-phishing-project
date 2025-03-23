@@ -1,53 +1,199 @@
 <!DOCTYPE html>
 <html lang="pt">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Verificador de URLs</title>
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            text-align: center;
-            padding: 20px;
-        }
-        input {
-            width: 80%;
-            padding: 10px;
-            margin-bottom: 10px;
-        }
-        button {
-            padding: 10px 20px;
-            cursor: pointer;
-        }
-        #resultado {
-            margin-top: 20px;
-            font-weight: bold;
-        }
+      body {
+        font-family: Arial, sans-serif;
+        text-align: center;
+        padding: 20px;
+      }
+      input {
+        width: 80%;
+        padding: 10px;
+        margin-bottom: 10px;
+      }
+      button {
+        padding: 10px 20px;
+        cursor: pointer;
+      }
+      #resultado {
+        margin-top: 20px;
+        font-weight: bold;
+      }
     </style>
-</head>
-<body>
-
+  </head>
+  <body>
     <h2>Verificador de URLs</h2>
-    <input type="text" id="urlInput" placeholder="Cole a URL aqui">
+    <input type="text" id="urlInput" placeholder="Cole a URL aqui" />
     <button onclick="verificarURL()">Verificar</button>
     <p id="resultado"></p>
 
     <script>
-        function verificarURL() {
-            let url = document.getElementById("urlInput").value;
-            let resultado = document.getElementById("resultado");
+      function verificarURL() {
+        let url = document.getElementById("urlInput").value.trim();
+        let resultado = document.getElementById("resultado");
 
-            if (!url) {
-                resultado.textContent = "Por favor, insira uma URL.";
-                resultado.style.color = "red";
-                return;
-            }
-
-            resultado.textContent = "Verificando URL...";
-            resultado.style.color = "black";
-
+        if (!url) {
+          resultado.textContent = "Por favor, insira uma URL.";
+          resultado.style.color = "red";
+          return;
         }
-    </script>
 
-</body>
+        try {
+          let urlObj = new URL(url);
+          let dominio = urlObj.hostname;
+
+          if (!validarFormato(url)) {
+            resultado.textContent =
+              "URL inválida! Verifique e tente novamente.";
+            resultado.style.color = "red";
+            return;
+          }
+
+          if (dominioSuspeito(dominio)) {
+            resultado.textContent = "Atenção! Este domínio pode ser suspeito.";
+            resultado.style.color = "orange";
+          } else {
+            resultado.textContent = "Formato de URL válido.";
+            resultado.style.color = "green";
+          }
+        } catch (error) {
+          resultado.textContent = "URL inválida!";
+          resultado.style.color = "red";
+        }
+      }
+
+      function validarFormato(url) {
+        let regex = /^(https?:\/\/)?([\w\-]+\.)+[\w\-]{2,}$/;
+        return regex.test(url);
+      }
+
+      function dominioSuspeito(dominio) {
+        let padroesSuspeitos = [
+        /.*\-secure\-.*/,
+        /.*\-login\-.*/,
+        /.*bancoseguro.*/,
+        /.*\d{5,}.*/,
+        /.*\..*\..*\..*/,
+        /.*\.bit\.ly/,
+        /.*\.tinyurl\.com/,
+        /.*\.shorte\.st/,
+        /.*\.goo\.gl/,
+        /.*\.v\.gd/,
+        /.*\.t\.co/,
+        /.*\.ow\.ly/,
+        /.*\.is\.gd/,
+        /.*\.adf\.ly/,
+        /.*\.ity\.im/,
+        /.*\.u\.to/,
+        /.*\.qr\.ae/,
+        /.*\.zz\.gd/,
+        /.*\.lc/,
+        /.*\.mcaf\.ee/,
+        /.*\.su\.pr/,
+        /.*\.yourls\.org/,
+        /.*\.cutt\.ly/,
+        /.*\.id\.ly/,
+        /.*\.po\.st/,
+        /.*\.s2r\.co/,
+        /.*\.tiny\.cc/,
+        /.*\.tny\.im/,
+        /.*\.x\.co/,
+        /.*\.0rz\.tw/,
+        /.*\.1url\.com/,
+        /.*\.4sq\.com/,
+        /.*\.4u\.fyi/,
+        /.*\.9nl\.com/,
+        /.*\.a\.gg/,
+        /.*\.ad\.vu/,
+        /.*\.aka\.ms/,
+        /.*\.amzn\.to/,
+        /.*\.apol\.io/,
+        /.*\.apps\.gov/,
+        /.*\.at\.ufl\.edu/,
+        /.*\.b\.link/,
+        /.*\.bc\.vc/,
+        /.*\.binged\.it/,
+        /.*\.buff\.ly/,
+        /.*\.by\.trib\.al/,
+        /.*\.c1ick\.us/,
+        /.*\.cl\.ly/,
+        /.*\.clickmeter\.com/,
+        /.*\.db\.tt/,
+        /.*\.doiop\.com/,
+        /.*\.eepurl\.com/,
+        /.*\.fb\.me/,
+        /.*\.feedburner\.com/,
+        /.*\.flip\.it/,
+        /.*\.fwd4\.me/,
+        /.*\.go\.usa\.gov/,
+        /.*\.huff\.to/,
+        /.*\.htxt\.it/,
+        /.*\.instapaper\.com/,
+        /.*\.j\.mp/,
+        /.*\.kl\.am/,
+        /.*\.kutt\.it/,
+        /.*\.l\.pr/,
+        /.*\.linkd\.in/,
+        /.*\.liip\.to/,
+        /.*\.m\.onkey\\.me/,
+        /.*\.mash\.to/,
+        /.*\.medium\.com/,
+        /.*\.migre\.me/,
+        /.*\.mky\.us/,
+        /.*\.my\.tl/,
+        /.*\.n\.pr/,
+        /.*\.nblo\.gs/,
+        /.*\.nym\.ag/,
+        /.*\.on\.fb\.me/,
+        /.*\.on\.mash\.to/,
+        /.*\.onforb\.es/,
+        /.*\.ora\.cl/,
+        /.*\.os\.me/,
+        /.*\.page\.link/,
+        /.*\.pin\.it/,
+        /.*\.pnt\.me/,
+        /.*\.prn\.to/,
+        /.*\.ptit\.us/,
+        /.*\.q\.gs/,
+        /.*\.qu\.st/,
+        /.*\.rdd\.it/,
+        /.*\.read\.bi/,
+        /.*\.rebrand\.ly/,
+        /.*\.rol\.st/,
+        /.*\.s\.id/,
+        /.*\.sc\.mp/,
+        /.*\.shar\.es/,
+        /.*\.shorl\.com/,
+        /.*\.simp\.ly/,
+        /.*\.smarturl\.it/,
+        /.*\.smsh\.me/,
+        /.*\.snip\.ly/,
+        /.*\.snipurl\.com/,
+        /.*\.spoti\.fi/,
+        /.*\.stks\.co/,
+        /.*\.tcrn\.ch/,
+        /.*\.tmi\.me/,
+        /.*\.trib\.al/,
+        /.*\.tr\.im/,
+        /.*\.tumblr\.com/,
+        /.*\.twitpic\.com/,
+        /.*\.u\.mavs\.com/,
+        /.*\.virg\.in/,
+        /.*\.vzt\.me/,
+        /.*\.wapo\.st/,
+        /.*\.wrd\.cm/,
+        /.*\.y2u\.be/,
+        /.*\.yep\.it/,
+        /.*\.youtu\.be/,
+        /.*\.zite\.to/,
+        /.*\.zurl\.ws/
+        ];
+        return padroesSuspeitos.some((padrao) => padrao.test(dominio));
+      }
+    </script>
+  </body>
 </html>
